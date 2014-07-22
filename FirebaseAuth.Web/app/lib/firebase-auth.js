@@ -24549,6 +24549,10 @@ angular.module('ngResource', ['ng']).
         .constant('FBURL', 'https://webapi.firebaseio.com/')
 
         .constant('APIURL', 'http://localhost:56535/api/')
+        
+        .constant('USER_API', 'http://localhost:56535/api/users/')
+
+        .constant('CITY_API', 'http://localhost:56535/api/cities/')
 
         .factory('authInterceptor', function ($rootScope, $q, $window) {
             return {
@@ -24666,15 +24670,20 @@ angular.module('ngResource', ['ng']).
     "use strict";
 
     var app = angular.module('firebaseAuth');
-    app.factory('Users', function ($resource, APIURL) {
-        var $users = $resource(APIURL + 'users');
+    app.factory('Users', function ($resource, USER_API, $http) {
+        var $users = $resource(USER_API + ':id', { id: '@id' });
         return {
             save: function saveUser(fbUser) {
                 return $users.save(fbUser);
-                //$http.post(APIURL + 'users', fbUser)
-                //    .success(function (e) {
-                //        console.log(e);
-                //    });
+            },
+            get: function getUser(id) {
+
+                $http.get(USER_API + id)
+                .success(function (data) {
+                    console.log(data);
+                });
+
+                //return $users.get({ id: id });
             }
         };
     });
@@ -24685,17 +24694,14 @@ angular.module('ngResource', ['ng']).
     "use strict";
 
     var app = angular.module('firebaseAuth');
-    app.factory('Cities', function ($http, $q) {
+    app.factory('Cities', function (CITY_API, $resource) {
+        var $cities = $resource(CITY_API + ':id', { id: '@id' }, { 'all': { method: 'GET', isArray: true } });
         return {
-            get: function getCities() {
-                var deferred = $q.defer();
-
-                $http.get('api/cities')
-                    .success(function (data) {
-                        deferred.resolve(data);
-                    });
-
-                return deferred.promise;
+            get: function getCities(id) {
+                if (id) {
+                    return $cities.get({ id: id });
+                }
+                return $cities.all();
             }
         };
     });
@@ -24708,12 +24714,13 @@ angular.module('ngResource', ['ng']).
         .controller('MainCtrl', function ($scope, FbAuth, Users, Cities) {
 
             FbAuth.onLogin(function (e, user) {
-                var result = Users.save(user);
- 
-                Cities.get()
-                .then(function (cities) {
-                    console.log(cities);
+                Users.save(user).$promise.then(function (user) {
+                    console.log('loading', user);
+                    Users.get(user.id);
+                    var result = Cities.get();
+                    console.log('cities', result);
                 });
+                
             });
 
             FbAuth.onLogout(function (e, user) {

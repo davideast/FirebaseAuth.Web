@@ -2,17 +2,14 @@
     "use strict";
 
     var app = angular.module('firebaseAuth');
-    app.factory('Cities', function ($http, $q) {
+    app.factory('Cities', function (CITY_API, $resource) {
+        var $cities = $resource(CITY_API + ':id', { id: '@id' }, { 'all': { method: 'GET', isArray: true } });
         return {
-            get: function getCities() {
-                var deferred = $q.defer();
-
-                $http.get('api/cities')
-                    .success(function (data) {
-                        deferred.resolve(data);
-                    });
-
-                return deferred.promise;
+            get: function getCities(id) {
+                if (id) {
+                    return $cities.get({ id: id });
+                }
+                return $cities.all();
             }
         };
     });

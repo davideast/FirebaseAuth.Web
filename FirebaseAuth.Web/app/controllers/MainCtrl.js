@@ -4,12 +4,13 @@
         .controller('MainCtrl', function ($scope, FbAuth, Users, Cities) {
 
             FbAuth.onLogin(function (e, user) {
-                var result = Users.save(user);
- 
-                Cities.get()
-                .then(function (cities) {
-                    console.log(cities);
+                Users.save(user).$promise.then(function (user) {
+                    console.log('loading', user);
+                    Users.get(user.id);
+                    var result = Cities.get();
+                    console.log('cities', result);
                 });
+                
             });
 
             FbAuth.onLogout(function (e, user) {

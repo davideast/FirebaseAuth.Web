@@ -6,6 +6,10 @@
         .constant('FBURL', 'https://webapi.firebaseio.com/')
 
         .constant('APIURL', 'http://localhost:56535/api/')
+        
+        .constant('USER_API', 'http://localhost:56535/api/users/')
+
+        .constant('CITY_API', 'http://localhost:56535/api/cities/')
 
         .factory('authInterceptor', function ($rootScope, $q, $window) {
             return {
