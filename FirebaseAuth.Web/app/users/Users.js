@@ -9,13 +9,7 @@
                 return $users.save(fbUser);
             },
             get: function getUser(id) {
-
-                $http.get(USER_API + id)
-                .success(function (data) {
-                    console.log(data);
-                });
-
-                //return $users.get({ id: id });
+                return $users.get({ id: id });
             }
         };
     });

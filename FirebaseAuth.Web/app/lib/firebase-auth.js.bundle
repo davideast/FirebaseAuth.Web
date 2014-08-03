@@ -9,7 +9,6 @@
   <file>/scripts/angular.js</file>
   <file>/scripts/angular-route.js</file>
   <file>/scripts/angular-resource.js</file>
-  <file>/scripts/angularfire.js</file>
 
   <!-- main app -->
   <file>/app/app.js</file>

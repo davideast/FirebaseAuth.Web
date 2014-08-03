@@ -72,8 +72,6 @@
     <Content Include="scripts\angular-touch.min.js" />
     <Content Include="scripts\angular.js" />
     <Content Include="scripts\angular.min.js" />
-    <Content Include="scripts\angularfire.js" />
-    <Content Include="scripts\angularfire.min.js" />
     <Content Include="scripts\firebase-debug.js" />
     <Content Include="scripts\firebase-simple-login.js" />
     <Content Include="scripts\firebase.js" />
